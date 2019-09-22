@@ -56,7 +56,9 @@ def cardEditorClothing(request, clothing_id=None):
 def cardEditorPerson(request, persona_id=None):
     context = {}
     context['images']=[]
-    for file in os.listdir('cardtemplateapp\static\card_art_cropped'):
+   # return HttpResponse(os.getcwd())
+
+    for file in os.listdir('cardtemplateapp/static/card_art_cropped'):
         context['images'].append(file)
     return render(request, "one-card.html", context)
 
