@@ -67,6 +67,9 @@
 			.hide{
 				opacity: 0;
 			}
+			.clickable-image-link{
+				cursor: pointer;
+			}
 		</style>
 	</head>
 	
@@ -91,7 +94,7 @@
 					<div class="row border" style="height:50%;">
 
 						<div class= "art-box" style="height:100%; width:100%; margin-left:auto; margin-right:auto;">
-							 <img src="{% static "card_art_cropped/panty_thief.png" %}" style="max-height:100%;"> 
+							 <img id = "img-box" src="{% static "card_art_cropped/panty_thief.png" %}" style="max-height:100%;"> 
 						</div>
 
 
@@ -165,7 +168,7 @@
 			  </div>
 			  <div class="modal-body">
 				{% for image in images %}
-					<p> {{image}} </p>
+					<p class="clickable-image-link" onclick="changeImage('/static/card_art_cropped/{{image}}')"> {{image}} </p>
 				{% endfor %}
 			  </div>
 			  <div class="modal-footer">
@@ -194,6 +197,10 @@
 			
 			function toggleInactive(){
 				$(".in-active-advances").toggleClass('show hide');
+			}
+			
+			function changeImage(imgURL){
+				$("#img-box").attr("src", imgURL);
 			}
 			
 			/*$(document).ready(function(){
