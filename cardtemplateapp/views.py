@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from cardtemplateapp.models import *
 import json
+import os
 
 # Create your views here.
 
@@ -54,6 +55,9 @@ def cardEditorClothing(request, clothing_id=None):
 
 def cardEditorPerson(request, persona_id=None):
     context = {}
+    context['images']=[]
+    for file in os.listdir('cardtemplateapp\static\card_art_cropped'):
+        context['images'].append(file)
     return render(request, "one-card.html", context)
 
 
