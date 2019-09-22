@@ -1,0 +1,158 @@
+<html>
+	{% load static %}
+	<head>
+		<title>Waifu Hunter Templates</title>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+			<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<script src="{% static "js/html2canvas.js" %}"></script>
+
+	
+
+		<style>
+			.card-box{
+				height: 300px;
+			}
+			.in-active-advances {
+				transform: rotate(90deg); /* Equal to rotateZ(45deg) */
+				background-color: pink;
+				font-size: small;
+				position: relative; 
+				width: 50px; 
+				height:50px; 
+				top: -25px; 
+				left:88%;
+			}
+			.shift-up{
+				position: relative;
+				top: -50px;
+			}
+			.shift-down{
+				position: relative;
+				top: 25px;
+			}
+			
+			.active-advances{
+				background-color: #bef7ab;
+				font-size: small;
+			}
+			
+			.flavor-text-box{
+				font-style: italic;
+				font-size: .7em;
+			}
+			.title-box{
+				font-weight: bold;
+			}
+			.effect-box{
+				margin-bottom:5px;
+				font-size: small;
+			}
+			img{
+				max-height:100%; 
+				max-width:100%;
+			}
+		</style>
+	</head>
+	
+
+    <body>
+	
+		<div class="container" style="height:500px;">
+			<div class="row" style="height:450px; width:320px;" id = "card-container">
+				<div class="col-sm border card-box rounded" style="height:100%;">
+					<div class= "title-box shift-down" style="float:right; font-size:large;" id="card-title">
+						Panty Thief
+					</div>
+					<div class="active-advances border border-success rounded-circle shift-down text-center" style = " width: 50px; height:50px;">
+						<div class="font-weight-bold">
+							Active
+						</div>
+						<div class="font-weight-bold" style="font-size: large;">
+							0
+						</div>
+					</div>
+
+					<div class="row border" style="height:60%;">
+
+						<div class= "art-box" style="height:100%; width:100%; margin-left:auto; margin-right:auto;">
+							 <img src="{% static "card_art_cropped/panty_thief.png" %}" style="max-height:100%;"> 
+						</div>
+
+
+					</div>
+					
+					<div class="row" style="height:35%;">
+						<div class="col-sm" >
+							<div class="in-active-advances border border-danger rounded-circle text-center" >
+								<div class= "text-nowrap font-weight-bold" style = "position: relative; left: -3px;">
+									In-Active
+								</div>
+								<div class="font-weight-bold" style="font-size: large;">
+									N/A
+								</div>
+							</div>
+
+							<div class= "type-box shift-up" >
+								Type: Pervert
+							</div>
+							<div class= "effect-box shift-up">
+								Play: If there are at least 3 other of your Perv cards in play on this waifu already, Pay LP+1 of the item to take it immediately.
+							</div>
+							
+							<div class= "flavor-text-box shift-up">
+
+								PANTSU!
+
+							</div>
+						</div>
+
+					</div>
+					
+					<div class="row shift-up" style="height:5%;">
+						<div class="col-sm" >
+							<div class= "learning-cost-box">
+								Learning Cost: <b>2</b>
+							</div>
+						</div>
+					</div>
+						
+				</div>
+			
+			</div>
+		</div>
+		
+		<div class="container" style="height:200px;">
+			<div class="row">
+				<div class="col-sm" >
+					<button type="button" class="btn btn-secondary" id="download-btn" onclick="htmlCanvas()">Download JPG</button>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			function htmlCanvas(){
+				html2canvas(document.querySelector("#card-container")).then(function(canvas) {
+				
+					var dt = canvas.toDataURL('image/jpeg');
+					
+					var a = document.createElement('a');
+					a.href = dt;
+					a.download = $("#card-title").text() +".jpg";
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+				});
+
+			}
+		</script>
+    </body>
+</html>
