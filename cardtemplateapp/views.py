@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from django.views.decorators.csrf import csrf_exempt
 import json
 import os
 
@@ -97,7 +97,7 @@ def cardEditorPerson(request, persona_id=None):
     except Exception as e:
         print(e)
         print("editting NEW card")
-        context['name'] = "Panty Thief"
+        context['name'] = "PantyThief"
         context['cost'] = 3
         context['persona'] = "Type: Pervert"
         context['image'] ="/static/card_art_cropped/panty_thief.png"
@@ -115,6 +115,7 @@ def cardEditorPerson(request, persona_id=None):
     
     return render(request, "one-card.html", context)
 
+@csrf_exempt
 def saveChanges(request):
     data = json.loads(request.POST["payload"])
     imgURL = data["imgURL"]
@@ -161,7 +162,7 @@ def saveChanges(request):
     carddata.save()
     return HttpResponse(json.dumps({"card_id":carddata.personality_id}), content_type="application/json")
 
-
+@csrf_exempt
 def saveChangesClothing(request):
     data = json.loads(request.POST["payload"])
 
