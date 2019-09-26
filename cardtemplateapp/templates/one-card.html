@@ -10,7 +10,8 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 			<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+			  
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 		<script src="{% static "js/html2canvas.js" %}"></script>
@@ -76,25 +77,27 @@
 
     <body>
 	
+	 <div hidden value = "{{id}}" id="card-id">{{id}}</div> 
+	
 		<div class="container" style="height:500px;">
 			<div class="row" style="height:470px; width:320px;" id = "card-container">
 				<div class="col-sm border card-box rounded" style="height:100%;">
 					<div class= "title-box shift-down" style="float:right; font-size:large; min-width:30px;" id="card-title" contentEditable="true">
-						Panty Thief
+						{{name}}
 					</div>
 					<div class="active-advances border border-success rounded-circle shift-down text-center" style = " width: 50px; height:50px;">
 						<div class="font-weight-bold">
 							Active
 						</div>
-						<div class="font-weight-bold" style="font-size: large;" contentEditable="true">
-							0
+						<div class="font-weight-bold" style="font-size: large;" contentEditable="true" id= "active-val">
+							{{active_value}}
 						</div>
 					</div>
 
 					<div class="row border" style="height:50%;">
 
 						<div class= "art-box" style="height:100%; width:100%; margin-left:auto; margin-right:auto;">
-							 <img id = "img-box" src="{% static "card_art_cropped/panty_thief.png" %}" style="max-height:100%;"> 
+							 <img id = "img-box" src="{{image}}" style="max-height:100%;"> 
 						</div>
 
 
@@ -106,21 +109,21 @@
 								<div class= "text-nowrap font-weight-bold" style = "position: relative; left: -3px;">
 									In-Active
 								</div>
-								<div class="font-weight-bold" style="font-size: large;" contentEditable="true">
-									N/A
+								<div class="font-weight-bold" style="font-size: large;" contentEditable="true" id = "inactive-val">
+									{{inactive_value}}
 								</div>
 							</div>
 
 							<div class= "type-box shift-up" contentEditable="true">
-								Type: Pervert
+								{{persona}}
 							</div>
 							<div class= "effect-box shift-up" contentEditable="true">
-								Play: If there are at least 3 other of your Perv cards in play on this waifu already, Pay LP+1 of the item to take it immediately.
+								{{effect_text}}
 							</div>
 							
 							<div class= "flavor-text-box shift-up " contentEditable="true">
 
-								PANTSU!
+								{{flavour_text}}
 
 							</div>
 						</div>
@@ -131,7 +134,7 @@
 						<div class="col-sm" >
 							<div class= "learning-cost-box">
 								<div style="float:left; margin-right:5px;"> Learning Cost:</div>
-								<div contentEditable="true" style="font-weight:bold;"> 2</div>
+								<div contentEditable="true" style="font-weight:bold;" id = "learning-cost-div" > {{cost}}</div>
 							</div>
 						</div>
 					</div>
@@ -150,8 +153,13 @@
 					<button type="button" class="btn btn-secondary" id="hide-inactive-btn" onclick="toggleInactive()">Hide Inactive</button>
 				</div>
 				<div class="col-sm" >
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#imageSelectModal">
+					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#imageSelectModal">
 						Change Image
+					</button>
+				</div>
+				<div class="col-sm" >
+					<button type="button" class="btn btn-primary" onclick="saveChanges()">
+						Save Changes
 					</button>
 				</div>
 			</div>
@@ -172,14 +180,41 @@
 				{% endfor %}
 			  </div>
 			  <div class="modal-footer">
-				<button type="button" class="btn btn-primary">Save changes</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			  </div>
+			  </didv>
 			</div>
 		  </div>
 		</div>
 
 		<script>
+		
+			function getCookie(name) {
+				var cookieValue = null;
+				if (document.cookie && document.cookie !== '') {
+					var cookies = document.cookie.split(';');
+					for (var i = 0; i < cookies.length; i++) {
+						var cookie = jQuery.trim(cookies[i]);
+						// Does this cookie string begin with the name we want?
+						if (cookie.substring(0, name.length + 1) === (name + '=')) {
+							cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+							break;
+						}
+					}
+				}
+				return cookieValue;
+			}
+			function csrfSafeMethod(method) {
+				// these HTTP methods do not require CSRF protection
+				return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+			}
+			$.ajaxSetup({
+				beforeSend: function(xhr, settings) {
+					if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+						xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+					}
+				}
+			});
+	
 			function htmlCanvas(){
 				html2canvas(document.querySelector("#card-container")).then(function(canvas) {
 				
@@ -203,11 +238,35 @@
 				$("#img-box").attr("src", imgURL);
 			}
 			
-			/*$(document).ready(function(){
-				alert("test");
-				document.getElementsByClassName("editable").contentEditable = true;
-				alert("done");
-			});*/
+			
+			function saveChanges(){
+				//round up inputs and save them
+				var imgURL = $("#img-box").attr("src");
+				var title = $("#card-title").text();
+				var lerncost = $("#learning-cost-div").text();
+				var flavortext = $(".flavor-text-box").text();
+				var effect = $(".effect-box").text();
+				var type = $(".type-box").text();
+				var inactiveval = $("#inactive-val").text();
+				var activeval = $("#active-val").text();
+				var cardID = $("#card-id").text();
+
+				
+				$.ajax({
+					method: "POST",
+					url: "../saveChanges/",
+					data: {"payload":JSON.stringify({"cardID": cardID, "imgURL": imgURL, "title":title, "lerncost":lerncost, 
+					"flavortext": flavortext, "effect":effect, "type":type, "inactiveval": inactiveval, "activeval" :activeval})},
+					success: function(response) {
+						alert("Changes Saved");
+						window.location.href = "../";
+					},
+					error: function(response) {
+						alert("error");
+					}
+				});
+			}
+
 		</script>
     </body>
 </html>

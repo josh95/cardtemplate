@@ -11,5 +11,6 @@ urlpatterns = [
     path('cardeditorclothing/', views.cardEditorClothing, name='cardeditcloth'),
     path('cardeditorpersona/', views.cardEditorPerson, name='cardeditperson'),
     path('cardMain/', views.cardMain, name='cardmain'),
+    path('saveChanges/', views.saveChanges, name='saveschanges'),
 ]
 
