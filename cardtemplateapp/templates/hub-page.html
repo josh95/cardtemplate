@@ -14,8 +14,6 @@
 			  
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-		<script src="{% static "js/html2canvas.js" %}"></script>
-
 	
 
 		<style>
@@ -77,91 +75,21 @@
 
     <body>
 	
-	 <div hidden value = "{{id}}" id="card-id">{{id}}</div> 
-	
-		<div class="container" style="height:500px;">
-			<div class="row" style="height:470px; width:320px;" id = "card-container">
-				<div class="col-sm border card-box rounded" style="height:100%;">
-					<div class= "title-box shift-down" style="float:right; font-size:large; min-width:30px;" id="card-title" contentEditable="true">
-						{{name}}
-					</div>
-					<div class="active-advances border border-success rounded-circle shift-down text-center" style = " width: 50px; height:50px;">
-						<div class="font-weight-bold">
-							Active
-						</div>
-						<div class="font-weight-bold" style="font-size: large;" contentEditable="true" id= "active-val">
-							{{active_value}}
-						</div>
-					</div>
+		<div class="container" >
 
-					<div class="row border" style="height:50%;">
-
-						<div class= "art-box" style="height:100%; width:100%; margin-left:auto; margin-right:auto;">
-							 <img id = "img-box" src="{{image}}" style="max-height:100%;"> 
-						</div>
-
-
-					</div>
-					
-					<div class="row" style="height:35%;">
-						<div class="col-sm" >
-							<div class="in-active-advances border border-danger rounded-circle text-center" >
-								<div class= "text-nowrap font-weight-bold" style = "position: relative; left: -3px;">
-									In-Active
-								</div>
-								<div class="font-weight-bold" style="font-size: large;" contentEditable="true" id = "inactive-val">
-									{{inactive_value}}
-								</div>
-							</div>
-
-							<div class= "type-box shift-up" contentEditable="true">
-								{{persona}}
-							</div>
-							<div class= "effect-box shift-up" contentEditable="true">
-								{{effect_text}}
-							</div>
-							
-							<div class= "flavor-text-box shift-up " contentEditable="true">
-
-								{{flavour_text}}
-
-							</div>
-						</div>
-
-					</div>
-					
-					<div class="row shift-up" style="height:5%;">
-						<div class="col-sm" >
-							<div class= "learning-cost-box">
-								<div style="float:left; margin-right:5px;"> Learning Cost:</div>
-								<div contentEditable="true" style="font-weight:bold;" id = "learning-cost-div" > {{cost}}</div>
-							</div>
-						</div>
-					</div>
-						
-				</div>
-			
-			</div>
 		</div>
 		
-		<div class="container" style="height:200px;">
+		<div class="container" ">
+			<div class- "row">
+				<h3>Personality Cards</h3>
+			</div>
 			<div class="row">
+				{% for person in person_cards %}
 				<div class="col-sm" >
-					<button type="button" class="btn btn-secondary" id="download-btn" onclick="htmlCanvas()">Download JPG</button>
+					<a href = "../cardeditorpersona/{{person.id}}" >{{person.name}}</a>
 				</div>
-				<div class="col-sm" >
-					<button type="button" class="btn btn-secondary" id="hide-inactive-btn" onclick="toggleInactive()">Hide Inactive</button>
-				</div>
-				<div class="col-sm" >
-					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#imageSelectModal">
-						Change Image
-					</button>
-				</div>
-				<div class="col-sm" >
-					<button type="button" class="btn btn-primary" onclick="saveChanges()">
-						Save Changes
-					</button>
-				</div>
+				{%endfor%}
+
 			</div>
 		</div>
 		
@@ -231,14 +159,8 @@
 			}
 			
 			function toggleInactive(){
-				$(".in-active-advances").toggleClass('hide');
+				$(".in-active-advances").toggleClass('show hide');
 			}
-			
-			$(document).ready(function() {
-				if (!{{inactive_used}}){
-					toggleInactive();
-				}
-			});
 			
 			function changeImage(imgURL){
 				$("#img-box").attr("src", imgURL);
@@ -256,20 +178,16 @@
 				var inactiveval = $("#inactive-val").text();
 				var activeval = $("#active-val").text();
 				var cardID = $("#card-id").text();
-				var inactiveused = true;
-				if ($(".in-active-advances").hasClass("hide")){
-					inactiveused = false;
-				}
 
 				
 				$.ajax({
 					method: "POST",
 					url: "../saveChanges/",
-					data: {"payload":JSON.stringify({"cardID": cardID, "imgURL": imgURL, "title":title, "lerncost":lerncost, "flavortext": flavortext,
-					"effect":effect, "type":type, "inactiveval": inactiveval, "inactiveused": inactiveused, "activeval" :activeval})},
+					data: {"payload":JSON.stringify({"cardID": cardID, "imgURL": imgURL, "title":title, "lerncost":lerncost, 
+					"flavortext": flavortext, "effect":effect, "type":type, "inactiveval": inactiveval, "activeval" :activeval})},
 					success: function(response) {
 						alert("Changes Saved");
-						window.location.href = "../cardMain";
+						window.location.href = "../";
 					},
 					error: function(response) {
 						alert("error");

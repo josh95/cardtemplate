@@ -17,13 +17,11 @@ def index(request):
 def cardMain(request):
     context = {}
     #fi1nd all sheets
-    if player_id is None:
-        player_id = 0
         
     cloth_cards = []
     person_cards = []
 
-    for person in Personality.objects:
+    for person in Personality.objects.all():
         person_cards.append({
             "id": person.personality_id,
             "name": person.name,
@@ -37,14 +35,17 @@ def cardMain(request):
             "image" : person.image
             })
         
-    for cloth in Clothing.objects:
+    for cloth in Clothing.objects.all():
         cloth_cards.append({
             "name": sheet.character_name,
             "image" : sheet.img_url,
             "description" : sheet.description,
             "id": sheet.sheet_id})
+
+    context["person_cards"] = person_cards
+    context["cloth_cards"] = cloth_cards
         
-    return render(request, "card_main.html", context)
+    return render(request, "hub-page.html", context)
 
 
 def cardEditorClothing(request, clothing_id=None):
@@ -63,7 +64,7 @@ def cardEditorPerson(request, persona_id=None):
         context['image'] = person.image
         context["active_value"] = person.active_value
         context['inactive_value'] = person.inactive_value
-        context['inactive_used'] = person.inactive_used
+        context['inactive_used'] = str(person.inactive_used).lower()
         context['effect_text'] = person.effect_text
         context['flavour_text'] = person.flavour_text
         context['id'] = person.personality_id
@@ -76,7 +77,7 @@ def cardEditorPerson(request, persona_id=None):
         context['image'] ="/static/card_art_cropped/panty_thief.png"
         context["active_value"] = 3
         context['inactive_value'] = 2
-        context['inactive_used'] = True
+        context['inactive_used'] = "true"
         context['effect_text'] = "The effect of this card goes here. This is some filler text as an example"
         context['flavour_text'] = "PANTSU! Flavor text goes here."
         context['id'] = "undefined"
@@ -98,6 +99,7 @@ def saveChanges(request):
     inactiveval =data["inactiveval"].strip()
     activeval = data["activeval"].strip()
     flavortext = data["flavortext"].strip()
+    inactiveused = data["inactiveused"]
     try:
         inactV = int(inactiveval)
     except ValueError:
@@ -111,7 +113,7 @@ def saveChanges(request):
             persona = cardtype,
             active_value = int(activeval),
             inactive_value = inactV,
-            inactive_used = True,
+            inactive_used = inactiveused,
             effect_text = effect,
             flavour_text = flavortext,
             image = imgURL,
@@ -125,7 +127,7 @@ def saveChanges(request):
             persona = cardtype,
             active_value = int(activeval),
             inactive_value = inactV,
-            inactive_used = True,
+            inactive_used = inactiveused,
             effect_text = effect,
             flavour_text = flavortext,
             image = imgURL,
