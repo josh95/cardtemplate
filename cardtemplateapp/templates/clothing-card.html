@@ -19,16 +19,18 @@
 	
 
 		<style>
-
-			.in-active-advances {
-				transform: rotate(90deg); /* Equal to rotateZ(45deg) */
+			.card-box{
+				height: 420px;
+				width: 320px;
+			}
+			.lp-circle {
 				background-color: pink;
 				font-size: small;
-				position: relative; 
+				position:absolute;
 				width: 50px; 
 				height:50px; 
-				top: -25px; 
-				left:88%;
+				bottom: 150px; 
+				left:80%;
 			}
 			.shift-up{
 				position: relative;
@@ -36,12 +38,14 @@
 			}
 			.shift-down{
 				position: relative;
-				top: 25px;
+				top: 30px;
 			}
 			
 			.active-advances{
 				background-color: #bef7ab;
 				font-size: small;
+				width: 50px; 
+				height:50px;
 			}
 			
 			.flavor-text-box{
@@ -55,17 +59,11 @@
 				margin-bottom:5px;
 				font-size: small;
 			}
-			img{
-				max-height:100%; 
-				max-width:100%;
-			}
-			.show{
-				opacity: 1;
+			
+			.type-box{
+				background:rgba(255,255,255,0.5);
 			}
 			
-			.hide{
-				opacity: 0;
-			}
 			.clickable-image-link{
 				cursor: pointer;
 			}
@@ -78,24 +76,32 @@
 	 <div hidden value = "{{id}}" id="card-id">{{id}}</div> 
 	
 		<div class="container" style="height:500px;">
-			<div class="row" style="height:470px; width:320px;" id = "card-container">
+			<div class="row card-box " id = "card-container">
+			
+				
 				<div class="col-sm border card-box rounded" style="height:100%;">
-					<div class= "title-box shift-down" style="float:right; font-size:large; min-width:30px;" id="card-title" contentEditable="true">
-						{{name}}
-					</div>
-					<div class="active-advances border border-success rounded-circle shift-down text-center" style = " width: 50px; height:50px;">
-						<div class="font-weight-bold">
-							Active
+					<div class= "title-box shift-down" style="float:right; font-size:large;">
+					
+						<div id ="owner-name" style= "float:left; margin-right:5px; min-width:30px; color:494fa2;" contentEditable="true">
+							{{owner}}
 						</div>
-						<div class="font-weight-bold" style="font-size: large;" contentEditable="true" id= "active-val">
-							{{active_value}}
+						<div id= "item-name" contentEditable="true" style=" float:left; min-width:30px;">
+							{{name}}
+						</div>
+					</div>
+					<div class="active-advances border border-success rounded-circle text-center">
+						<div class="font-weight-bold text-nowrap">
+							Min. Adv.
+						</div>
+						<div id ="minAdv" class="font-weight-bold" style="font-size: large;" contentEditable="true">
+							{{min_adv}}
 						</div>
 					</div>
 
-					<div class="row border" style="height:50%;">
+					<div class="row" style="height:60%;">
 
-						<div class= "art-box" style="height:100%; width:100%; margin-left:auto; margin-right:auto;">
-							 <img id = "img-box" src="{{image}}" style="max-height:100%;"> 
+						<div class= "art-box" style="height:100%; margin-left:auto; margin-right:auto;">
+							 <img id="img-box" src="{{image}}" style="max-height:100%;"> 
 						</div>
 
 
@@ -103,42 +109,36 @@
 					
 					<div class="row" style="height:35%;">
 						<div class="col-sm" >
-							<div class="in-active-advances border border-danger rounded-circle text-center" >
-								<div class= "text-nowrap font-weight-bold" style = "position: relative; left: -3px;">
-									In-Active
-								</div>
-								<div class="font-weight-bold" style="font-size: large;" contentEditable="true" id = "inactive-val">
-									{{inactive_value}}
-								</div>
-							</div>
 
-							<div class= "type-box shift-up" contentEditable="true">
-								{{persona}}
+
+							<div class= "type-box shift-up" style="min-width:30px;">
+								To Claim: <br>
+								<div p id = "claim-text" contentEditable="true">
+									{{claim_text}}
+								</div>
 							</div>
-							<div class= "effect-box shift-up" contentEditable="true">
-								{{effect_text}}
+							<div class= "effect-box shift-up" >
+								Special Effect:
+								<div id = "special-text" contentEditable="true" style="min-width:30px; min-height:30px;">
+									{{special_text}}
+								</div>
 							</div>
 							
-							<div class= "flavor-text-box shift-up " contentEditable="true">
+							
 
-								{{flavour_text}}
-
-							</div>
 						</div>
 
 					</div>
 					
-					<div class="row shift-up" style="height:5%;">
-						<div class="col-sm" >
-							<div class= "learning-cost-box">
-								<div style="float:left; margin-right:5px;"> Learning Cost:</div>
-								<div contentEditable="true" style="font-weight:bold;" id = "learning-cost-div" > {{cost}}</div>
-							</div>
+					<div class="border border-danger rounded-circle text-center lp-circle" >
+						<div class= "text-nowrap font-weight-bold " style = "position: relative; ">
+							LP
 						</div>
-					</div>
-						
+						<div class="font-weight-bold" style="font-size: large;" id = "lp-div" contentEditable="true">
+							{{lp}}
+						</div>
+					</div>	
 				</div>
-			
 			</div>
 		</div>
 		
@@ -147,9 +147,7 @@
 				<div class="col-sm" >
 					<button type="button" class="btn btn-secondary" id="download-btn" onclick="htmlCanvas()">Download JPG</button>
 				</div>
-				<div class="col-sm" >
-					<button type="button" class="btn btn-secondary" id="hide-inactive-btn" onclick="toggleInactive()">Hide Inactive</button>
-				</div>
+
 				<div class="col-sm" >
 					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#imageSelectModal">
 						Change Image
@@ -220,7 +218,7 @@
 					
 					var a = document.createElement('a');
 					a.href = dt;
-					a.download = $("#card-title").text() +".jpg";
+					a.download = $(".title-box").text().trim() +".jpg";
 					document.body.appendChild(a);
 					a.click();
 					document.body.removeChild(a);
@@ -233,9 +231,7 @@
 			}
 			
 			$(document).ready(function() {
-				if (!{{inactive_used}}){
-					toggleInactive();
-				}
+				//pass
 			});
 			
 			function changeImage(imgURL){
@@ -246,25 +242,20 @@
 			function saveChanges(){
 				//round up inputs and save them
 				var imgURL = $("#img-box").attr("src");
-				var title = $("#card-title").text();
-				var lerncost = $("#learning-cost-div").text();
-				var flavortext = $(".flavor-text-box").text();
-				var effect = $(".effect-box").text();
-				var type = $(".type-box").text();
-				var inactiveval = $("#inactive-val").text();
-				var activeval = $("#active-val").text();
+				var owner = $("#owner-name").text();
+				var itemName = $("#item-name").text();
+				var minAdv = $("#minAdv").text();
+				var lp = $("#lp-div").text();
+				var specialtext = $("#special-text").text();
+				var claimtext = $("#claim-text").text();
 				var cardID = $("#card-id").text();
-				var inactiveused = true;
-				if ($(".in-active-advances").hasClass("hide")){
-					inactiveused = false;
-				}
 
 				
 				$.ajax({
 					method: "POST",
-					url: "../saveChanges/",
-					data: {"payload":JSON.stringify({"cardID": cardID, "imgURL": imgURL, "title":title, "lerncost":lerncost, "flavortext": flavortext,
-					"effect":effect, "type":type, "inactiveval": inactiveval, "inactiveused": inactiveused, "activeval" :activeval})},
+					url: "../saveChangesClothing/",
+					data: {"payload":JSON.stringify({"cardID": cardID, "imgURL": imgURL, "owner":owner, "itemName":itemName, "minAdv": minAdv,
+						   "lp":lp, "specialtext": specialtext, "claimtext": claimtext})},
 					success: function(response) {
 						alert("Changes Saved");
 						window.location.href = "../cardMain";

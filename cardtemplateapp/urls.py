@@ -12,5 +12,7 @@ urlpatterns = [
     path('cardeditorpersona/', views.cardEditorPerson, name='cardeditperson'),
     path('cardMain/', views.cardMain, name='cardmain'),
     path('saveChanges/', views.saveChanges, name='saveschanges'),
+    path('saveChangesClothing/', views.saveChangesClothing, name='saveschangesclothing'),
+    
 ]
 

@@ -79,8 +79,8 @@
 
 		</div>
 		
-		<div class="container" ">
-			<div class- "row">
+		<div class="container">
+			<div class= "row">
 				<h3>Personality Cards</h3>
 			</div>
 			<div class="row">
@@ -90,6 +90,32 @@
 				</div>
 				{%endfor%}
 
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-sm" >
+					<a href = "../cardeditorpersona"><button type="button" class="btn btn-primary">New Personality</button></a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container" style="margin-top:6%">
+			<div class= "row">
+				<h3>Clothing Cards</h3>
+			</div>
+			<div class="row">
+				{% for cloth in cloth_cards %}
+				<div class="col-sm" >
+					<a href = "../cardeditorclothing/{{cloth.id}}" >{{cloth.name}}</a>
+				</div>
+				{%endfor%}
+
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-sm" >
+					<a href = "../cardeditorclothing" ><button type="button" class="btn btn-primary">New Clothing</button></a>
+				</div>
 			</div>
 		</div>
 		
@@ -158,42 +184,6 @@
 
 			}
 			
-			function toggleInactive(){
-				$(".in-active-advances").toggleClass('show hide');
-			}
-			
-			function changeImage(imgURL){
-				$("#img-box").attr("src", imgURL);
-			}
-			
-			
-			function saveChanges(){
-				//round up inputs and save them
-				var imgURL = $("#img-box").attr("src");
-				var title = $("#card-title").text();
-				var lerncost = $("#learning-cost-div").text();
-				var flavortext = $(".flavor-text-box").text();
-				var effect = $(".effect-box").text();
-				var type = $(".type-box").text();
-				var inactiveval = $("#inactive-val").text();
-				var activeval = $("#active-val").text();
-				var cardID = $("#card-id").text();
-
-				
-				$.ajax({
-					method: "POST",
-					url: "../saveChanges/",
-					data: {"payload":JSON.stringify({"cardID": cardID, "imgURL": imgURL, "title":title, "lerncost":lerncost, 
-					"flavortext": flavortext, "effect":effect, "type":type, "inactiveval": inactiveval, "activeval" :activeval})},
-					success: function(response) {
-						alert("Changes Saved");
-						window.location.href = "../";
-					},
-					error: function(response) {
-						alert("error");
-					}
-				});
-			}
 
 		</script>
     </body>

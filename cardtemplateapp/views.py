@@ -37,10 +37,8 @@ def cardMain(request):
         
     for cloth in Clothing.objects.all():
         cloth_cards.append({
-            "name": sheet.character_name,
-            "image" : sheet.img_url,
-            "description" : sheet.description,
-            "id": sheet.sheet_id})
+            "name": cloth.name,
+            "id": cloth.clothing_id})
 
     context["person_cards"] = person_cards
     context["cloth_cards"] = cloth_cards
@@ -50,7 +48,35 @@ def cardMain(request):
 
 def cardEditorClothing(request, clothing_id=None):
     context = {}
-    return HttpResponse(clothing_id)
+    context['images']=[]
+
+    try: 
+        clothing = Clothing.objects.get(clothing_id=clothing_id)
+        context['name'] = clothing.name
+        context['owner'] = clothing.owner
+        context['claim_text'] = clothing.claim_text
+        context['special_text'] = clothing.special_text
+        context["lp"] = clothing.lp
+        context['min_adv'] = clothing.min_adv
+        context['image'] =clothing.image
+        context['id'] = clothing.clothing_id
+    except Exception as e:
+        print(e)
+        print("editting NEW card")
+        context['name'] = "Panties"
+        context['owner'] = "Sexy Girl's "
+        context['claim_text'] = "Insert text here for how to claim this item. yep. some more placeholder text. blah blah Spend 4 effort"
+        context['special_text'] = "Special effects that this item can activate go here. Text Test text. Placeholder text."
+        context["lp"] = 4
+        context['min_adv'] = 2
+        context['image'] ="/static/card_art_cropped/panties.jpg"
+        context['id'] = "undefined"
+    
+
+    for file in os.listdir('cardtemplateapp/static/card_art_cropped'):
+        context['images'].append(file)
+
+    return render(request, "clothing-card.html", context)
 
 def cardEditorPerson(request, persona_id=None):
     context = {}
@@ -133,5 +159,38 @@ def saveChanges(request):
             image = imgURL,
            )
     carddata.save()
-    
     return HttpResponse(json.dumps({"card_id":carddata.personality_id}), content_type="application/json")
+
+
+def saveChangesClothing(request):
+    data = json.loads(request.POST["payload"])
+
+    if data["cardID"].strip() != "undefined":
+        cardID = int(data["cardID"].strip())
+        carddata = Clothing(
+            name = data["itemName"].strip(),
+            owner = data["owner"].strip(),
+            claim_text = data["claimtext"].strip(),
+            special_text = data["specialtext"].strip(),
+            lp = int(data["lp"]),
+            min_adv = int(data["minAdv"]),
+            image = data["imgURL"],
+            clothing_id = cardID
+           )
+    else:
+        #savin new entry
+        carddata = Clothing(
+            name = data["itemName"].strip(),
+            owner = data["owner"].strip(),
+            claim_text = data["claimtext"].strip(),
+            special_text = data["specialtext"].strip(),
+            lp = int(data["lp"]),
+            min_adv = int(data["minAdv"]),
+            image = data["imgURL"]
+           )
+    carddata.save()
+
+    return HttpResponse("Success")
+    
+    
+   
